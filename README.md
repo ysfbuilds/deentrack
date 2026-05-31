@@ -1,0 +1,1 @@
+Claude responded: A local browser app to track your daily Islamic deeds, knowledge notes, and streak — no account needed.A local browser app to track your daily Islamic deeds, knowledge notes, and streak 
