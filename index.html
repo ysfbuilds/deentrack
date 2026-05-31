@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DeenTrack — عمل للآخرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --g1:#1a3a2a;--g2:#2d6a4f;--g3:#40916c;--g4:#74c69d;--g5:#d8f3dc;
+  --gold:#c9a84c;--gold-l:#e8c864;--gold-faint:#fdf9ee;
+  --surface:#f7f5f0;--card:#ffffff;--border:#e6e1d6;
+  --text:#1c1c1a;--muted:#7a7468;--faint:#f0ede4;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --surface:#0d1510;--card:#132018;--border:#243020;
+    --text:#e4ede6;--muted:#6a8a70;--faint:#182414;
+    --gold:#d4b050;--gold-l:#e8c864;--gold-faint:#181408;
+    --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  }
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--surface);
+  color:var(--text);
+  min-height:100vh;
+  padding:2rem 1rem 4rem;
+}
+
+.app{max-width:740px;margin:0 auto}
+
+/* ── Header ── */
+.header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:2.2rem;padding-bottom:1.6rem;
+  border-bottom:1px solid var(--border);
+}
+.title-lockup{}
+.eyebrow{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.site-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;line-height:1;color:var(--text)}
+.arabic{font-size:17px;color:var(--gold);margin-top:4px;letter-spacing:.03em}
+.header-right{text-align:right}
+.date-pill{
+  font-size:12px;color:var(--muted);
+  background:var(--faint);border:1px solid var(--border);
+  padding:6px 14px;border-radius:20px;white-space:nowrap;
+  display:inline-block;margin-bottom:8px;
+}
+.hijri-pill{
+  font-size:11px;color:var(--gold);
+  display:block;text-align:right;
+}
+
+/* ── Stats ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.4rem}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:1rem 1.1rem;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.stat-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--g2),var(--g4));
+}
+.stat-card.gold-accent::after{background:linear-gradient(90deg,var(--gold),var(--gold-l))}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;line-height:1;color:var(--text)}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ── Progress ── */
+.progress-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:1.1rem 1.3rem;margin-bottom:1.4rem;box-shadow:var(--shadow);
+}
+.progress-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.progress-title{font-size:13px;font-weight:500;color:var(--text)}
+.progress-pct{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--g3)}
+.progress-track{height:7px;background:var(--faint);border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--g2),var(--g4));transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ── Section ── */
+.section{margin-bottom:1.6rem}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text)}
+.add-btn{
+  font-size:12px;color:var(--g3);background:none;
+  border:1px solid var(--g3);padding:5px 14px;border-radius:20px;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;
+  letter-spacing:.02em;
+}
+.add-btn:hover{background:var(--g3);color:#fff}
+
+/* ── Deed items ── */
+.deed-list{display:flex;flex-direction:column;gap:8px}
+.deed-item{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:11px 14px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .15s;user-select:none;box-shadow:var(--shadow);
+}
+.deed-item:hover{border-color:var(--g4);transform:translateY(-1px)}
+.deed-item.done{opacity:.55}
+.deed-item.done .deed-name{text-decoration:line-through;color:var(--muted)}
+.deed-check{
+  width:23px;height:23px;border-radius:50%;border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .2s;font-size:12px;color:transparent;
+}
+.deed-item.done .deed-check{background:var(--g3);border-color:var(--g3);color:#fff}
+.deed-name{flex:1;font-size:14px;font-weight:400}
+.deed-cat{font-size:11px;padding:3px 9px;border-radius:10px;white-space:nowrap;font-weight:500}
+.cat-ibadah{background:#e4f5eb;color:#1e6040}
+.cat-quran{background:#fdf1db;color:#8a6008}
+.cat-dhikr{background:#ede8f8;color:#5a3e96}
+.cat-sadaqah{background:#fce8e8;color:#922020}
+.cat-ilm{background:#e4edfb;color:#1e3e90}
+@media(prefers-color-scheme:dark){
+  .cat-ibadah{background:#152a1e;color:#74c69d}
+  .cat-quran{background:#241c06;color:#d4b050}
+  .cat-dhikr{background:#1c1530;color:#b09add}
+  .cat-sadaqah{background:#250e0e;color:#d47070}
+  .cat-ilm{background:#0c1628;color:#6088d4}
+}
+.deed-del{
+  font-size:15px;background:none;border:none;cursor:pointer;
+  padding:3px 5px;color:var(--muted);opacity:0;
+  transition:opacity .15s;line-height:1;border-radius:6px;
+}
+.deed-item:hover .deed-del{opacity:1}
+.deed-del:hover{background:var(--faint);color:var(--text)}
+.empty-state{
+  text-align:center;padding:2rem;color:var(--muted);font-size:14px;
+  border:1px dashed var(--border);border-radius:12px;background:var(--card);
+}
+
+/* ── Knowledge notes ── */
+.knowledge-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.knowledge-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:13px 14px;box-shadow:var(--shadow);
+}
+.k-header{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.k-icon{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.k-icon.green{background:#e4f5eb;color:#1e6040}
+.k-icon.amber{background:#fdf1db;color:#8a6008}
+.k-icon.purple{background:#ede8f8;color:#5a3e96}
+.k-icon.blue{background:#e4edfb;color:#1e3e90}
+@media(prefers-color-scheme:dark){
+  .k-icon.green{background:#152a1e;color:#74c69d}
+  .k-icon.amber{background:#241c06;color:#d4b050}
+  .k-icon.purple{background:#1c1530;color:#b09add}
+  .k-icon.blue{background:#0c1628;color:#6088d4}
+}
+.k-title{font-size:13px;font-weight:500;color:var(--text)}
+.k-input{
+  width:100%;font-size:13px;background:var(--faint);
+  border:1px solid var(--border);border-radius:8px;
+  padding:7px 9px;color:var(--text);font-family:'DM Sans',sans-serif;
+  resize:none;outline:none;line-height:1.5;
+  transition:border-color .15s;
+}
+.k-input:focus{border-color:var(--g3);background:var(--card)}
+
+/* ── Quote ── */
+.quote-card{
+  background:var(--gold-faint);border:1px solid #ddc97a;
+  border-left:3px solid var(--gold);border-radius:14px;
+  padding:1.2rem 1.4rem;margin-top:.5rem;
+}
+@media(prefers-color-scheme:dark){.quote-card{border-color:#3a2e08;background:#141008;border-left-color:var(--gold)}}
+.quote-text{
+  font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;
+  color:var(--text);line-height:1.7;margin-bottom:7px;
+}
+.quote-src{font-size:12px;color:var(--muted)}
+
+/* ── Modal ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.4);backdrop-filter:blur(4px);
+  z-index:200;align-items:center;justify-content:center;padding:1rem;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:1.8rem;width:100%;max-width:400px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  animation:slideUp .2s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:1.2rem}
+.modal label{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.modal input,.modal select{
+  width:100%;font-size:14px;background:var(--faint);
+  border:1px solid var(--border);border-radius:10px;
+  padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;
+  outline:none;margin-bottom:14px;transition:border-color .15s;
+}
+.modal input:focus,.modal select:focus{border-color:var(--g3)}
+.modal-btns{display:flex;gap:8px;margin-top:4px}
+.btn-primary{
+  flex:1;background:var(--g2);color:#fff;border:none;
+  padding:11px;border-radius:10px;font-size:14px;
+  cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;
+  transition:background .15s;
+}
+.btn-primary:hover{background:var(--g3)}
+.btn-cancel{
+  flex:1;background:none;color:var(--muted);
+  border:1px solid var(--border);padding:11px;
+  border-radius:10px;font-size:14px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+.btn-cancel:hover{background:var(--faint)}
+
+@media(max-width:520px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .stats-row .stat-card:last-child{grid-column:1/-1}
+  .knowledge-grid{grid-template-columns:1fr}
+  .header{flex-direction:column;gap:.8rem}
+  .header-right{text-align:left}
+  .site-title{font-size:26px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="title-lockup">
+      <div class="eyebrow">Your daily tracker</div>
+      <div class="site-title">Amal Dashboard</div>
+      <div class="arabic">عمل للآخرة</div>
+    </div>
+    <div class="header-right">
+      <div class="date-pill" id="datePill">—</div>
+      <div class="hijri-pill" id="hijriPill"></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Today</div>
+      <div class="stat-value" id="statDone">0</div>
+      <div class="stat-sub">deeds completed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Remaining</div>
+      <div class="stat-value" id="statLeft">0</div>
+      <div class="stat-sub">still to go</div>
+    </div>
+    <div class="stat-card gold-accent">
+      <div class="stat-label">Streak</div>
+      <div class="stat-value" id="statStreak">0</div>
+      <div class="stat-sub">day streak 🤍</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-title">Daily progress</div>
+      <div class="progress-pct" id="progressPct">0%</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Deeds -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Daily Deeds</div>
+      <button class="add-btn" onclick="openModal()">+ Add deed</button>
+    </div>
+    <div class="deed-list" id="deedList"></div>
+  </div>
+
+  <!-- Knowledge Notes -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Knowledge & Reflection</div>
+    </div>
+    <div class="knowledge-grid">
+      <div class="knowledge-card">
+        <div class="k-header">
+          <div class="k-icon green"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+          <div class="k-title">Quran reflection</div>
+        </div>
+        <textarea class="k-input" rows="3" id="noteQuran" placeholder="Today's ayah or reflection…"></textarea>
+      </div>
+      <div class="knowledge-card">
+        <div class="k-header">
+          <div class="k-icon amber"><i class="ti ti-feather" aria-hidden="true"></i></div>
+          <div class="k-title">Hadith learned</div>
+        </div>
+        <textarea class="k-input" rows="3" id="noteHadith" placeholder="A hadith you studied…"></textarea>
+      </div>
+      <div class="knowledge-card">
+        <div class="k-header">
+          <div class="k-icon purple"><i class="ti ti-bulb" aria-hidden="true"></i></div>
+          <div class="k-title">Lesson / reminder</div>
+        </div>
+        <textarea class="k-input" rows="3" id="noteLesson" placeholder="What did you learn today?"></textarea>
+      </div>
+      <div class="knowledge-card">
+        <div class="k-header">
+          <div class="k-icon blue"><i class="ti ti-heart" aria-hidden="true"></i></div>
+          <div class="k-title">Du'a & intentions</div>
+        </div>
+        <textarea class="k-input" rows="3" id="noteDua" placeholder="Your du'a or niyyah…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quote -->
+  <div class="quote-card">
+    <div class="quote-text" id="quoteText"></div>
+    <div class="quote-src" id="quoteSrc"></div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">Add a deed</div>
+    <label for="deedNameInput">Deed name</label>
+    <input type="text" id="deedNameInput" placeholder="e.g. Pray Fajr on time" maxlength="80" autocomplete="off"/>
+    <label for="deedCatInput">Category</label>
+    <select id="deedCatInput">
+      <option value="ibadah">Ibadah (worship)</option>
+      <option value="quran">Quran</option>
+      <option value="dhikr">Dhikr</option>
+      <option value="sadaqah">Sadaqah / charity</option>
+      <option value="ilm">Seeking knowledge ('Ilm)</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="addDeed()">Add deed</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUOTES = [
+  { text: "Indeed, with hardship comes ease.", src: "Surah Ash-Sharh 94:6" },
+  { text: "And whoever relies upon Allah — then He is sufficient for him.", src: "Surah At-Talaq 65:3" },
+  { text: "The best of deeds are those done consistently, even if they are small.", src: "Sahih al-Bukhari & Muslim" },
+  { text: "Whoever treads a path seeking knowledge, Allah eases for him the path to Jannah.", src: "Sahih Muslim" },
+  { text: "Take up good deeds only as much as you are able, for the best deeds are those done regularly even if they are few.", src: "Ibn Majah" },
+  { text: "Allah does not burden a soul beyond that it can bear.", src: "Surah Al-Baqarah 2:286" },
+  { text: "Verily, actions are by intentions, and every person will get what they intended.", src: "Sahih al-Bukhari & Muslim" },
+  { text: "Make things easy and do not make them difficult. Cheer people up and do not drive them away.", src: "Sahih al-Bukhari" },
+  { text: "The strong man is not the one who can wrestle, but the one who controls himself when angry.", src: "Sahih al-Bukhari" },
+  { text: "None of you truly believes until he loves for his brother what he loves for himself.", src: "Sahih al-Bukhari & Muslim" },
+  { text: "Speak good or remain silent.", src: "Sahih al-Bukhari & Muslim" },
+  { text: "The most beloved of deeds to Allah are those that are most consistent, even if they are small.", src: "Sahih al-Bukhari" },
+];
+
+const CAT_LABELS = { ibadah: 'Ibadah', quran: 'Quran', dhikr: 'Dhikr', sadaqah: 'Sadaqah', ilm: "'Ilm" };
+const TODAY = new Date().toISOString().split('T')[0];
+
+function defaultDeeds() {
+  return [
+    { id: 1, name: 'Pray all 5 salah', cat: 'ibadah', done: false },
+    { id: 2, name: 'Read Quran (min. 1 page)', cat: 'quran', done: false },
+    { id: 3, name: 'Morning & evening adhkar', cat: 'dhikr', done: false },
+    { id: 4, name: 'Learn one new thing', cat: 'ilm', done: false },
+  ];
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem('amal_v2');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return {
+    deeds: defaultDeeds(),
+    notes: { quran: '', hadith: '', lesson: '', dua: '' },
+    streak: 0,
+    lastDay: '',
+  };
+}
+
+let state = loadState();
+
+function save() {
+  localStorage.setItem('amal_v2', JSON.stringify(state));
+}
+
+function updateStreak() {
+  if (state.lastDay === TODAY) return;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = yesterday.toISOString().split('T')[0];
+  if (state.lastDay === yStr) {
+    state.streak = (state.streak || 0) + 1;
+  } else if (state.lastDay !== TODAY) {
+    state.streak = 1;
+  }
+  state.lastDay = TODAY;
+  save();
+}
+
+function render() {
+  updateStreak();
+
+  const done = state.deeds.filter(d => d.done).length;
+  const total = state.deeds.length;
+  const left = total - done;
+  const pct = total ? Math.round(done / total * 100) : 0;
+
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statLeft').textContent = left;
+  document.getElementById('statStreak').textContent = state.streak || 0;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Date
+  const now = new Date();
+  document.getElementById('datePill').textContent =
+    now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Deeds
+  const list = document.getElementById('deedList');
+  if (state.deeds.length === 0) {
+    list.innerHTML = '<div class="empty-state">No deeds yet — add one above to get started.</div>';
+  } else {
+    list.innerHTML = '';
+    state.deeds.forEach(d => {
+      const item = document.createElement('div');
+      item.className = 'deed-item' + (d.done ? ' done' : '');
+      item.innerHTML = `
+        <div class="deed-check">${d.done ? '✓' : ''}</div>
+        <div class="deed-name">${escHtml(d.name)}</div>
+        <span class="deed-cat cat-${d.cat}">${CAT_LABELS[d.cat] || d.cat}</span>
+        <button class="deed-del" data-id="${d.id}" aria-label="Remove deed">✕</button>
+      `;
+      item.addEventListener('click', e => {
+        if (e.target.classList.contains('deed-del')) {
+          removeDeed(parseInt(e.target.dataset.id));
+        } else {
+          toggleDeed(d.id);
+        }
+      });
+      list.appendChild(item);
+    });
+  }
+
+  // Notes
+  ['quran', 'hadith', 'lesson', 'dua'].forEach(k => {
+    const el = document.getElementById('note' + k.charAt(0).toUpperCase() + k.slice(1));
+    if (el && document.activeElement !== el) el.value = state.notes[k] || '';
+  });
+
+  // Quote — rotate by day of month
+  const q = QUOTES[now.getDate() % QUOTES.length];
+  document.getElementById('quoteText').textContent = '\u201c' + q.text + '\u201d';
+  document.getElementById('quoteSrc').textContent = '— ' + q.src;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleDeed(id) {
+  const d = state.deeds.find(x => x.id === id);
+  if (d) { d.done = !d.done; save(); render(); }
+}
+
+function removeDeed(id) {
+  state.deeds = state.deeds.filter(x => x.id !== id);
+  save(); render();
+}
+
+function openModal() {
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('deedNameInput').focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('deedNameInput').value = '';
+}
+
+function addDeed() {
+  const name = document.getElementById('deedNameInput').value.trim();
+  if (!name) { document.getElementById('deedNameInput').focus(); return; }
+  const cat = document.getElementById('deedCatInput').value;
+  state.deeds.push({ id: Date.now(), name, cat, done: false });
+  save(); closeModal(); render();
+}
+
+// Note autosave
+['Quran', 'Hadith', 'Lesson', 'Dua'].forEach(k => {
+  const el = document.getElementById('note' + k);
+  if (el) el.addEventListener('input', () => {
+    state.notes[k.toLowerCase()] = el.value;
+    save();
+  });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Enter' && document.getElementById('modalOverlay').classList.contains('open')) {
+    e.preventDefault(); addDeed();
+  }
+});
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+render();
+</script>
+</body>
+</html>
